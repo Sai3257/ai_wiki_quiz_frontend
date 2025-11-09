@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, XCircle, BookOpen, FileText, Lightbulb } from 'lucide-react';
+import { CheckCircle, XCircle, BookOpen, FileText, Lightbulb, Link2, Sparkles } from 'lucide-react';
 
 /**
  * QuizDisplay Component
@@ -95,6 +95,15 @@ const QuizDisplay = ({ quiz }) => {
                   <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg">
                     Question {index + 1}
                   </span>
+                  {question.difficulty && (
+                    <span className={`px-3 py-1 rounded-lg text-xs font-semibold ${
+                      question.difficulty === 'easy' ? 'bg-green-100 text-green-700' :
+                      question.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {question.difficulty.toUpperCase()}
+                    </span>
+                  )}
                   <div className="h-px bg-gradient-to-r from-blue-500/50 to-transparent flex-1"></div>
                 </div>
                 <h4 className="text-xl font-bold text-gray-800 leading-relaxed">
@@ -213,6 +222,37 @@ const QuizDisplay = ({ quiz }) => {
           );
         })}
       </div>
+
+      {/* Related Topics Section */}
+      {quiz.related_topics && quiz.related_topics.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="bg-white/90 backdrop-blur-md border border-blue-200 shadow-lg rounded-2xl p-8"
+        >
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-lg shadow-lg shadow-purple-500/40">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800">Related Topics for Further Reading</h3>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {quiz.related_topics.map((topic, index) => (
+              <a
+                key={index}
+                href={`https://en.wikipedia.org/wiki/${topic.replace(/ /g, '_')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border-2 border-blue-200 hover:border-blue-400 px-4 py-3 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md"
+              >
+                <Link2 className="w-4 h-4 text-blue-500 group-hover:text-blue-600" />
+                <span className="text-gray-700 font-medium group-hover:text-gray-900">{topic}</span>
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };
